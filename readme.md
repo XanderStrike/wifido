@@ -82,6 +82,17 @@ Data Representation
 
 * store in sqlite3
 * transfer in JSON
+* fields
+  * time - integer
+  * mac - text
+  * essid - text
+  * strength - real
+  * lat - real
+  * long - real
+  * alt - real
+
+create table wifis(time integer, mac text, essid text, strength real, lat real, long real, alt real);
+
 
 Acquisition speed
 
