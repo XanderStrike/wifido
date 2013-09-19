@@ -7,6 +7,8 @@ import sys
 import time
 import json
 
+con = lite.connect('db/data.sqlite3')
+
 # allow any origin, reqired for API
 @hook('after_request')
 def enable_cors():
