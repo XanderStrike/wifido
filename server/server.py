@@ -7,8 +7,18 @@ import sys
 import time
 import json
 
+# allow any origin, reqired for API
+@hook('after_request')
+def enable_cors():
+  response.headers['Access-Control-Allow-Origin'] = '*'
+
 @route('/')
 def hello():
   return "Hello world!"
+
+# serve static files
+@route('/static/:filename')
+def static(filename):
+  return static_file(filename, root='./static/')
 
 run(host='0.0.0.0', port=3030)
