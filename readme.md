@@ -93,6 +93,7 @@ Data Representation
 
 create table wifis(time integer, mac text, essid text, strength real, lat real, long real, alt real);
 
+[{\"time\":1379633831,\"mac\":\"df:34:23:cd:30:19\",\"essid\":\"hello world\",\"strength\":0.89,\"lat\":34.446398,\"long\":-119.662271,\"alt\":221},{\"time\":1379633910,\"mac\":\"ab:cd:12:34:56:zd\",\"essid\":\"hello again\",\"strength\":0.41,\"lat\":34.446786,\"long\":-119.661391,\"alt\":298}]
 
 Acquisition speed
 
