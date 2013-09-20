@@ -38,6 +38,20 @@ def import_data():
   con.commit()
   return "success" 
 
+# interval API, takes integer times for start and end, and a mac address
+@route('/api/i')
+@route('/api/i/:start')
+@route('/api/i/:start/:end')
+@route('/api/i/:start/:end/:mac')
+def interval(start="0", end=str(time.time()), mac=''):
+  cur = con.cursor()
+  if (mac == ''):
+    cur.execute("SELECT * FROM wifis WHERE time>" + start + " AND time<" + end)
+  else:
+    cur.execute("SELECT * FROM wifis WHERE time>" + start + " AND time<" + end + " AND mac=\"" + mac + "\"")
+  return json.dumps(cur.fetchall())
+
+
 # serve static files
 @route('/static/:filename')
 def static(filename):
