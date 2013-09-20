@@ -1,7 +1,7 @@
 #server.py
 # Serves information for the api and the web page
 
-from lib.bottle import hook, response, route, run, template, static_file
+from lib.bottle import hook, response, route, run, template, static_file, request
 import sqlite3 as lite
 import sys
 import time
@@ -17,6 +17,26 @@ def enable_cors():
 @route('/')
 def hello():
   return "Hello world!"
+
+# POST data api
+@route('/api/data', method='POST')
+def import_data():
+  data = request.forms.get('data')
+  objects = json.loads(data)
+  cur = con.cursor()
+  for row in objects:
+    values = [
+              str(row['time']),
+              '"' + row['mac'] + '"',
+              '"' + row['essid'] + '"',
+              str(row['strength']),
+              str(row['lat']),
+              str(row['long']),
+              str(row['alt'])
+             ]
+    cur.execute("insert into wifis values(" + ','.join(values) + ")")
+  con.commit()
+  return "success" 
 
 # serve static files
 @route('/static/:filename')
