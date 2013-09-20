@@ -16,7 +16,7 @@ def enable_cors():
 
 @route('/')
 def hello():
-  return "Hello world!"
+  return static_file("index.html", root='./static/')
 
 # POST data api
 @route('/api/data', method='POST')
