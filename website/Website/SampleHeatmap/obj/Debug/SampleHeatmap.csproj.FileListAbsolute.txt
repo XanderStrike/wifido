@@ -1,6 +1,0 @@
-C:\Users\nolan_000\Documents\GitHub\wifido\website\Website\SampleHeatmap\bin\SampleHeatmap.dll.config
-C:\Users\nolan_000\Documents\GitHub\wifido\website\Website\SampleHeatmap\bin\SampleHeatmap.dll
-C:\Users\nolan_000\Documents\GitHub\wifido\website\Website\SampleHeatmap\bin\SampleHeatmap.pdb
-C:\Users\nolan_000\Documents\GitHub\wifido\website\Website\SampleHeatmap\obj\Debug\SampleHeatmap.csprojResolveAssemblyReference.cache
-C:\Users\nolan_000\Documents\GitHub\wifido\website\Website\SampleHeatmap\obj\Debug\SampleHeatmap.dll
-C:\Users\nolan_000\Documents\GitHub\wifido\website\Website\SampleHeatmap\obj\Debug\SampleHeatmap.pdb
