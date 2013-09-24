@@ -1,13 +1,58 @@
-<html>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>WiFido</title>
+    <title>Test Maps - WifiDo</title>
+
+    <style type="text/css">
+        html { height: 100% }
+        body { height: 100%; margin: 0; padding: 0 }
+        #map-canvas { height: 100% }
+    </style>
+
   <script src="/static/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4vMhlKh14FS3IRBY-1OeQanw6zxxv_t0&libraries=visualization&sensor=true">
+    </script>
+
+    <script type="text/javascript">
+
+        function initialize() {
+			
+			var westmontLatLong = new google.maps.LatLng(34.448622, -119.661654);
+		
+            var mapOptions = {
+                center: westmontLatLong,
+                zoom: 18,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+
+            var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+			var marker = new google.maps.Marker({
+				position: westmontLatLong,
+				map: map,
+				title: "Westmont College"
+			});
+			
+			var heatmapData = [
+				{ location: new google.maps.LatLng(34.448743, -119.662847), weight: 4},
+				{ location: new google.maps.LatLng(34.448933, -119.662592), weight: 13},
+				{ location: new google.maps.LatLng(34.448776, -119.662397), weight: 8}
+			];
+			
+			var heatmap = new google.maps.visualization.HeatmapLayer({
+				data: heatmapData,
+				radius: 70
+			});
+			heatmap.setMap(map);
+			
+		}
+        
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
 </head>
-
 <body>
-  <h1>index.html</h1>
-  <h2>For index-related things</h2>
 
-  Nolan this is where you do your thing.
+    <div id="map-canvas"></div>
+
 </body>
 </html>
