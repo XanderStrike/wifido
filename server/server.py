@@ -15,7 +15,7 @@ def enable_cors():
   response.headers['Access-Control-Allow-Origin'] = '*'
 
 @route('/')
-def hello():
+def index():
   return static_file("index.html", root='./static/')
 
 # POST data api
