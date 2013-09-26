@@ -15,6 +15,8 @@
 
     <script type="text/javascript">
 
+		var map;
+	
         function initialize() {
 			
 			var westmontLatLong = new google.maps.LatLng(34.448622, -119.661654);
@@ -25,7 +27,7 @@
                 mapTypeId: google.maps.MapTypeId.ROADMAP
             };
 
-            var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
 
 			var marker = new google.maps.Marker({
 				position: westmontLatLong,
@@ -33,17 +35,22 @@
 				title: "Westmont College"
 			});
 			
-			var heatmapData = [
-				{ location: new google.maps.LatLng(34.448743, -119.662847), weight: 4},
-				{ location: new google.maps.LatLng(34.448933, -119.662592), weight: 13},
-				{ location: new google.maps.LatLng(34.448776, -119.662397), weight: 8}
-			];
+			//Get the JSON Data
+			$.getJSON("/api/i", function(result) {
+				var heatmapData = new Array();
+				
+				$.each(result, function(i, field) {
+					var data = { location: new google.maps.LatLng(field[4], field[5]), weight: field[3] };
+					heatmapData.push(data);
+				});
+				
 			
-			var heatmap = new google.maps.visualization.HeatmapLayer({
-				data: heatmapData,
-				radius: 70
+				var heatmap = new google.maps.visualization.HeatmapLayer({
+					data: heatmapData,
+					radius: 70
+				});
+				heatmap.setMap(map);
 			});
-			heatmap.setMap(map);
 			
 		}
         
@@ -51,7 +58,6 @@
     </script>
 </head>
 <body>
-
     <div id="map-canvas"></div>
 
 </body>
