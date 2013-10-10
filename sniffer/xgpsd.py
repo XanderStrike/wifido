@@ -2,6 +2,13 @@ import bluetooth
 import time
 # import threading
 
+def pair:
+
+def start_listening:
+
+def get_fix:
+
+
 if __name__ == '__main__':
 
     # what we know about the bluetooth device
@@ -33,6 +40,10 @@ if __name__ == '__main__':
             for line in lines:
                 if line.find("\r\n") != -1:
                     line = line.strip()
+                    line_values = line.split(',')
+                    if line_values[0] = '$GPRMC':
+                        gps['lat']: line_values[3] + line_values[4]
+                        gps['long']: line_values[5] + line_values[5]
                     print line # put in hash here...
                     old_data = ""
                 else:
