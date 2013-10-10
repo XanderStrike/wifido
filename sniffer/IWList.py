@@ -76,7 +76,7 @@ class IWList():
             if s.strip().startswith("Frequency:"):
                cellData["Frequency"] = self.getCellFrequency(s)
             if s.strip().startswith("Quality="):
-                #cellData["Quality"] = self.getCellQuality(s)
+                cellData["Quality"] = self.getCellQuality(s)
                 cellData["Signal"] = self.getCellSignal(s)
                 #cellData["Noise"] = self.getCellNoise(s)
             if s.strip().startswith("Encryption key:"):
@@ -123,15 +123,18 @@ class IWList():
         return s.strip().split(":")[1]
 
     def getCellSignal(self, s):
-        return s.strip()[8:13]
+        signal = s[s.index("l=") + 2:-1]
+        print "Signal: " + signal
+        return signal
 
     def getCellNoise(self, s):
         s = s.split("Noise level:")[1]
         return s.strip().split(" ")[0]
 
     def getCellQuality(self, s):
-        s = s.split(":")[1]
-        return s.strip().split(" ")[0]
+        quality = s[s.index("y=") + 2:s.index("/100") + 4]
+        print "Quality: " + quality
+        return quality
 
     def getCellMAC(self, s):
         return s.strip().split(" ")[4]
