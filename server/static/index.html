@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Test Maps - WifiDo</title>
+    <title>Test Maps - WifiDo</title>  
 
     <style type="text/css">
         html { height: 100% }
         body { height: 100%; margin: 0; padding: 0 }
-        #map-canvas { height: 100% }
+        #map-canvas { height: 70% }
+		#position-list { height : 30% }
+
+        table { width: 100%; align-self: stretch; font-size: 16px; margin: 3px; }
+        th { text-align: left; }
+        td { padding: 3px; }
+        tr { border-bottom: solid; border-bottom-width: 1px; }
+        .trhover { background-color: aliceblue; }
+        .headerRow { background-color: lightblue; }
+
     </style>
 
   <script src="/static/jquery-1.10.2.min.js"></script>
@@ -37,11 +46,13 @@
 			
 			//Get the JSON Data
 			$.getJSON("/api/i", function(result) {
-				var heatmapData = new Array();
+			    var heatmapData = new Array();
+			    var newTable = "<table><tr class='headerRow'><th>Time Captured</th><th>SSID</th><th>Strength</th><th>Lattitude</th><th>Longitude</th><th>Altitude</th></tr>";
 				
 				$.each(result, function(i, field) {
 					var data = { location: new google.maps.LatLng(field[4], field[5]), weight: field[3] };
 					heatmapData.push(data);
+					newTable = newTable + "<tr><td>" + field[0] + "</td><td>" + field[2] + "</td><td>" + field[3] + "</td><td>" + field[4] + "</td><td>" + field[5] + "</td><td>" + field[6] + "</td></tr>";
 				});
 				
 			
@@ -50,6 +61,8 @@
 					radius: 70
 				});
 				heatmap.setMap(map);
+
+				document.getElementById("positionTable").innerHTML = newTable;
 			});
 			
 		}
@@ -58,7 +71,14 @@
     </script>
 </head>
 <body>
-    <div id="map-canvas"></div>
 
+    <div id="map-canvas"></div>
+	<div id="position-list">
+		<div class="position-header">
+			
+		</div>
+
+        <div id="positionTable"></div>
+    </div>
 </body>
 </html>

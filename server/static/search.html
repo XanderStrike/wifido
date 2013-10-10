@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.9.1/dijit/themes/tundra/tundra.css">
+    <link type="text/css" rel="stylesheet" href="style.css" />
+    
+
+</head>
+<body class="tundra">
+    
+    <div class="header"></div>
+    <div class="search">
+	<span class="search-section">
+			Start:
+			<input id="startDate" data-dojo-type="dijit/form/DateTextBox" style="width: 120px" />
+		</span>
+		<span class="search-section">
+			End:
+			<input id="endDate" data-dojo-type="dijit/form/DateTextBox" style="width: 120px" />
+		</span>
+        <span class="search-section">
+            MAC:
+            <input id="mac" data-dojo-type="dijit/form/TextBox" style="width: 180px" />
+        </span>
+        <span class="search-section">
+            <button id="mac" data-dojo-type="dijit/form/Button" style="width: 80px">Search!</button>
+        </span>
+    </div>
+
+
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.9.1/dojo/dojo.js" data-dojo-config="isDebug: true, async: true, parseOnLoad: true"></script>
+    <script>
+        // load requirements for declarative widgets in page content
+        require(["dojo/parser", "dijit/form/Button", "dijit/form/TextBox", "dijit/form/DateTextBox", "dojo/domReady!"]);
+    </script>
+
+</body>
+</html>
