@@ -34,13 +34,13 @@ if __name__ == "__main__":
 
         iwl = IWList("wlan0")
         data = iwl.getData()
-        
+
         for i in range(0, len(data.keys())):
 
             strength_1 = float(data[data.keys()[i]]["Signal"][0:data[data.keys()[i]]["Signal"].index("/")])
             strength_2 = float(data[data.keys()[i]]["Signal"][3:6])
             current_essid = data[data.keys()[i]]["ESSID"]
-            
+
             print str(strength_1) + " / " + str(strength_2) + " = " + str(strength_1 / strength_2) + " for " + current_essid
             if ((strength_1 / strength_2) > current_signal) and current_essid == "Westmont_Encrypted":
                 current_signal = strength_1 / strength_2
@@ -50,19 +50,22 @@ if __name__ == "__main__":
 
             if (current_essid not in whitelist):
 
-                if current_essid not in rogue_networks.keys():
-                    rogue_networks[current_essid] = datetime.now()
-                
-                rogue_ready = (datetime.now() - rogue_networks[current_essid]).total_seconds() >= tweet_frequency
-                global_ready = (datetime.now() - last_tweeted).total_seconds() >= tweet_frequency
-                
-                print "GLOBAL: " + str(global_ready) + " ROGUE: " + str(rogue_ready)
+                # if current_essid not in rogue_networks.keys():
+                #     rogue_networks[current_essid] = datetime.now()
 
-                if (rogue_ready and global_ready and last_rogue_essid != current_essid):
+                # rogue_ready = (datetime.now() - rogue_networks[current_essid]).total_seconds() >= tweet_frequency
+
+                global_ready = (datetime.now() - last_tweeted).total_seconds() >= tweet_frequency
+
+                # print "GLOBAL: " + str(global_ready) + " ROGUE: " + str(rogue_ready)
+
+                if (global_ready and last_rogue_essid != current_essid):
                     Tweet.update_status(tweet, json_data["app_key"], json_data["app_secret"], json_data["oauth_token"], json_data["oauth_token_secret"])
 
                     last_tweeted = datetime.now()
-                    rogue_networks[current_essid] = datetime.now()
+
+                    #rogue_networks[current_essid] = datetime.now()
+
                     last_rogue_essid = current_essid
 
 
@@ -79,4 +82,4 @@ if __name__ == "__main__":
 
         proc.terminate()
         # print "DOWN"
-        proc.wait() 
+        proc.wait()
