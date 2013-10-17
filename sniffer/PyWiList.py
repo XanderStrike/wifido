@@ -17,7 +17,7 @@ wait_time = 5
 tweet_frequency = 30 # seconds
 
 whitelist = ["Westmont_Encrypted", "Westmont_Open", ""]
-rogue_networks = {}
+#rogue_networks = {}
 last_tweeted = datetime.now()
 last_rogue_essid = ""
 
