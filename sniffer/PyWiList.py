@@ -14,7 +14,7 @@ log.setLevel(logging.DEBUG)
 current_signal = -0.1
 multiplier = 4
 wait_time = 5
-tweet_frequency = 30 # seconds
+tweet_frequency = 87 # seconds
 
 whitelist = ["Westmont_Encrypted", "Westmont_Open", ""]
 #rogue_networks = {}
