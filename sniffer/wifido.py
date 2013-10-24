@@ -1,7 +1,7 @@
 from IWList import *
 from subprocess import Popen, PIPE, STDOUT
 from datetime import date, datetime, timedelta
-import sys, os, logging, time, subprocess, thread
+import sys, os, logging, time, subprocess, thread, re
 import RPi.GPIO as GPIO
 import Tweet
 import json
@@ -38,8 +38,9 @@ if __name__ == "__main__":
 
         for i in range(0, len(data.keys())):
 
-            strength_1 = float(data[data.keys()[i]]["Signal"][0:data[data.keys()[i]]["Signal"].index("/")])
-            strength_2 = float(data[data.keys()[i]]["Signal"][3:6])
+            match = re.match(r"(\r+)/(\r+)", data[data.keys()[i]]["Signal"])
+            strength_1 = float(match.group(1))
+            strength_2 = float(match.group(2))
             current_essid = data[data.keys()[i]]["ESSID"]
 
             print str(strength_1) + " / " + str(strength_2) + " = " + str(strength_1 / strength_2) + " for " + current_essid
