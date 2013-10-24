@@ -36,12 +36,12 @@ if __name__ == "__main__":
         iwl = IWList(interface)
         data = iwl.getData()
 
-        for i in range(0, len(data.keys())):
+        for cell in data.values():
 
-            match = re.match(r"(\r+)/(\r+)", data[data.keys()[i]]["Signal"])
+            match = re.match(r"(\r+)/(\r+)", cell["Signal"])
             strength_1 = float(match.group(1))
             strength_2 = float(match.group(2))
-            current_essid = data[data.keys()[i]]["ESSID"]
+            current_essid = cell["ESSID"]
 
             print str(strength_1) + " / " + str(strength_2) + " = " + str(strength_1 / strength_2) + " for " + current_essid
             if ((strength_1 / strength_2) > current_signal) and current_essid == "Westmont_Encrypted":
