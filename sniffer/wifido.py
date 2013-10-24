@@ -8,7 +8,7 @@ import json
 from pprint import pprint
 
 logging.basicConfig()
-log = logging.getLogger("PyWiList")
+log = logging.getLogger("wifido")
 log.setLevel(logging.DEBUG)
 
 interface = "eth1"
