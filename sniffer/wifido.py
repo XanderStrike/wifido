@@ -27,10 +27,14 @@ if __name__ == "__main__":
     GPIO.setup(11, GPIO.OUT)
 
     while True:
+        # Get GPS data
+        # store in a temp var
+        # gpsdata = {time: 12341234, alt: 432, lat: 431423.23, lon: -3232.22}
 
+        # Get WiFi data
         iwl = IWList(interface)
         data = iwl.getData()
-
+        
         for cell in data.values():
 
             match = re.match(r"(\r+)/(\r+)", cell["Signal"])
@@ -43,6 +47,8 @@ if __name__ == "__main__":
                 current_signal = strength_1 / strength_2
 
             Tweet.bark(current_essid, json_data)
+
+            # write to db
 
         # Blink LED
         GPIO.output(11, False)
