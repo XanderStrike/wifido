@@ -44,15 +44,14 @@ if __name__ == "__main__":
 
             Tweet.bark(current_essid, json_data)
 
+        # Blink LED
         GPIO.output(11, False)
         time.sleep(.1)
         GPIO.output(11, True)
 
-        # print "Best Signal: " + str(current_signal)
-        # print "UP"
+        # Sleep while playing sound
         proc = subprocess.Popen(['mpg321', 'beep.mp3'], shell=False)
         time.sleep( wait_time - (current_signal * multiplier) )
 
         proc.terminate()
-        # print "DOWN"
         proc.wait()
