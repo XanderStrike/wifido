@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
         for cell in data.values():
 
-            match = re.match(r"(\r+)/(\r+)", cell["Signal"])
+            match = re.match(r"(\d+)/(\d+)", cell["Signal"])
             strength_1 = float(match.group(1))
             strength_2 = float(match.group(2))
             current_essid = cell["ESSID"]
