@@ -15,12 +15,7 @@ interface = "eth1"
 current_signal = -0.1
 multiplier = 4
 wait_time = 5
-tweet_frequency = 87 # seconds
 
-whitelist = ["Westmont_Encrypted", "Westmont_Open", ""]
-#rogue_networks = {}
-last_tweeted = datetime.now()
-last_rogue_essid = ""
 
 if __name__ == "__main__":
 
@@ -47,31 +42,7 @@ if __name__ == "__main__":
             if ((strength_1 / strength_2) > current_signal) and current_essid == "Westmont_Encrypted":
                 current_signal = strength_1 / strength_2
 
-            # tweet here
-            tweet = "Bark! at " + current_essid + " on  " + datetime.now().strftime("%Y-%m-%d %H:%M and %S seconds")
-
-            if (current_essid not in whitelist):
-
-                # if current_essid not in rogue_networks.keys():
-                #     rogue_networks[current_essid] = datetime.now()
-
-                # rogue_ready = (datetime.now() - rogue_networks[current_essid]).total_seconds() >= tweet_frequency
-
-                global_ready = (datetime.now() - last_tweeted).total_seconds() >= tweet_frequency
-
-                # print "GLOBAL: " + str(global_ready) + " ROGUE: " + str(rogue_ready)
-
-                if (global_ready and last_rogue_essid != current_essid):
-                    #Tweet.update_status(tweet, json_data["app_key"], json_data["app_secret"], json_data["oauth_token"], json_data["oauth_token_secret"])
-
-                    last_tweeted = datetime.now()
-
-                    #rogue_networks[current_essid] = datetime.now()
-
-                    last_rogue_essid = current_essid
-
-
-        # GPIO here
+            Tweet.bark(current_essid, json_data)
 
         GPIO.output(11, False)
         time.sleep(.1)
