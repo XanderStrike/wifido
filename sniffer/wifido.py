@@ -35,12 +35,12 @@ if __name__ == "__main__":
         for cell in IWList(interface).getData().values():
 
             match = re.match(r"(\d+)/(\d+)", cell["Signal"])
-            strength_nu = float(match.group(1))
-            strength_de = float(match.group(2))
-            strength = strength_nu / strength_de
+            strength_nu = match.group(1)
+            strength_de = match.group(2)
+            strength = float(strength_nu) / float(strength_de)
             essid = cell["ESSID"]
 
-            print str(strength_nu) + " / " + str(strength_de) + " = " + str(strength) + " for " + current_essid
+            print strength_nu + " / " + strength_de + " = " + str(strength) + " for " + current_essid
             # Keep track of the strength of our primary network.
             if essid == "Westmont_Encrypted"
                 current_signal = strength
