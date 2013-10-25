@@ -10,7 +10,7 @@ logging.basicConfig()
 log = logging.getLogger("wifido")
 log.setLevel(logging.DEBUG)
 
-interface = "eth1"
+interface = "wlan0"
 current_signal = -0.1
 multiplier = 4
 wait_time = 5
