@@ -1,6 +1,5 @@
 from IWList import *
 from subprocess import Popen, PIPE, STDOUT
-from datetime import date, datetime, timedelta
 import sys, os, logging, time, subprocess, thread, re
 import RPi.GPIO as GPIO
 import Tweet
