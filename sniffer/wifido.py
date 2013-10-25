@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
             print str(strength_nu) + " / " + str(strength_de) + " = " + str(strength) + " for " + current_essid
             # Keep track of the strength of our primary network.
-            if essid == "Westmont_Encrypted" and strength > current_signal
+            if essid == "Westmont_Encrypted"
                 current_signal = strength
 
             Tweet.bark(essid, json_data)
