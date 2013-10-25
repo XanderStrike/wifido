@@ -31,22 +31,21 @@ if __name__ == "__main__":
         # store in a temp var
         # gpsdata = {time: 12341234, alt: 432, lat: 431423.23, lon: -3232.22}
 
-        # Get WiFi data
-        iwl = IWList(interface)
-        data = iwl.getData()
-        
-        for cell in data.values():
+        # Process WiFi data
+        for cell in IWList(interface).getData().values():
 
             match = re.match(r"(\d+)/(\d+)", cell["Signal"])
-            strength_1 = float(match.group(1))
-            strength_2 = float(match.group(2))
-            current_essid = cell["ESSID"]
+            strength_nu = float(match.group(1))
+            strength_de = float(match.group(2))
+            strength = strength_nu / strength_de
+            essid = cell["ESSID"]
 
-            print str(strength_1) + " / " + str(strength_2) + " = " + str(strength_1 / strength_2) + " for " + current_essid
-            if ((strength_1 / strength_2) > current_signal) and current_essid == "Westmont_Encrypted":
-                current_signal = strength_1 / strength_2
+            print str(strength_nu) + " / " + str(strength_de) + " = " + str(strength) + " for " + current_essid
+            # Keep track of the strength of our primary network.
+            if essid == "Westmont_Encrypted" and strength > current_signal
+                current_signal = strength
 
-            Tweet.bark(current_essid, json_data)
+            Tweet.bark(essid, json_data)
 
             # write to db
 
