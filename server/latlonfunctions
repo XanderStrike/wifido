@@ -1,0 +1,47 @@
+# takes a signal strength (in dB) and frequency (in MHz) and returns the approximate
+# distance to the source of the signal
+def sigStrength2distance(strength, freq):
+    exp = (27.55 - (20 * math.log10(freq)) - strength) / 20.0
+    return math.pow(10.0, exp);
+
+# takes two lat/lon coords and returns the distance in km between them
+def distance_between_points(lat1, lon1, lat2, lon2):
+    dLat = math.fabs(lat1-lat2)
+    dLon = math.fabs(lon1-lon2)
+    dPhi = math.log10(math.tan(math.pi/4+lat2/2)/math.tan(math.pi/4+lat1/2))
+    q = Math.cos(lat1) if (math.isnan(dLat/dPhi)) else dLat/dPhi  # E-W line gives dPhi=0
+
+    # if dLon over 180° take shorter rhumb across anti-meridian:
+    if (math.fabs(dLon) > Math.pi):
+        dLon = dLon>0 ? -(2*Math.pi-dLon) : (2*Math.pi+dLon)
+
+    distance = math.sqrt(dLat*dLat + q*q*dLon*dLon) * R
+    bearing = math.atan2(dLon, dPhi);
+    return distance
+
+# takes a pair coordinates for a start point, a distance (km) and a bearing
+# and returns the point at the end of the projected line from the starting point
+def dist_and_bearing2point(lat1, lon1, dist, bearing):
+    dLat = d*math.cos(brng)
+    lat2 = lat1 + dLat;
+    dPhi = math.log10(math.tan(lat2/2+math.pi/4)/math.tan(lat1/2+math.pi/4));
+    q = Math.cos(lat1) if (math.isnan(dLat/dPhi)) else dLat/dPhi  # E-W line gives dPhi=0
+    dLon = d*math.sin(brng)/q;
+
+    # check for some daft bugger going past the pole, normalise latitude if so
+    #if (math.fabs(lat2) > math.pi/2) lat2 = lat2>0 ? math.pi-lat2 : -math.pi-lat2;
+
+    lon2 = (lon1+dLon+math.pi)%(2*math.pi) - math.pi;
+    #return lat2, lon2
+
+# takes two coordinates with their signal strength (in dB) and frequency (in MHz)
+# and estimates the location of the source device (assuming both points are from the same source)
+def triangulate(lat1, lon1, str1, freq1, lat2, lon2, str2, freq2):
+    b=sigStrength2distance(str1, freq1)
+    a=sigStrength2distance(str2, freq2)
+    c=distance_betweeen_points(lat1, lon1, lat2, lon2)
+    # c,bearing= ``
+    alpha=math.acos((b*b+c*c-a*a)/2*b*c)
+    #dist_and_bearing2point(lat1, lon1, b, alpha + bearing)
+    #dist_and_bearing2point(lat1, lon1, b, alpha - bearing)
+
