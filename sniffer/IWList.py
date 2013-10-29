@@ -124,7 +124,6 @@ class IWList():
 
     def getCellSignal(self, s):
         signal = s[s.index("l=") + 2:-1]
-        print "Signal: " + signal
         return signal
 
     def getCellNoise(self, s):
@@ -133,7 +132,6 @@ class IWList():
 
     def getCellQuality(self, s):
         quality = s[s.index("y=") + 2:s.index("/100") + 4]
-        print "Quality: " + quality
         return quality
 
     def getCellMAC(self, s):

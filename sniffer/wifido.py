@@ -1,7 +1,7 @@
 from IWList import *
 from subprocess import Popen, PIPE, STDOUT
 from datetime import date, datetime, timedelta
-import sys, os, logging, time, subprocess, thread, re
+import sys, os, logging, time, subprocess, thread
 import RPi.GPIO as GPIO
 import Tweet
 import json
@@ -11,6 +11,7 @@ logging.basicConfig()
 log = logging.getLogger("PyWiList")
 log.setLevel(logging.DEBUG)
 
+interface = "eth1"
 current_signal = -0.1
 multiplier = 4
 wait_time = 5
@@ -32,13 +33,13 @@ if __name__ == "__main__":
 
     while True:
 
-        iwl = IWList("wlan0")
+        iwl = IWList(interface)
         data = iwl.getData()
 
         for i in range(0, len(data.keys())):
-            match = re.match(r"(\d+)/(\d+)", data[data.keys()[i]]["Signal"])
-            strength_1 = float(match.group(1))
-            strength_2 = float(match.group(2))
+
+            strength_1 = float(data[data.keys()[i]]["Signal"][0:data[data.keys()[i]]["Signal"].index("/")])
+            strength_2 = float(data[data.keys()[i]]["Signal"][3:6])
             current_essid = data[data.keys()[i]]["ESSID"]
 
             print str(strength_1) + " / " + str(strength_2) + " = " + str(strength_1 / strength_2) + " for " + current_essid
@@ -60,7 +61,7 @@ if __name__ == "__main__":
                 # print "GLOBAL: " + str(global_ready) + " ROGUE: " + str(rogue_ready)
 
                 if (global_ready and last_rogue_essid != current_essid):
-                    Tweet.update_status(tweet, json_data["app_key"], json_data["app_secret"], json_data["oauth_token"], json_data["oauth_token_secret"])
+                    #Tweet.update_status(tweet, json_data["app_key"], json_data["app_secret"], json_data["oauth_token"], json_data["oauth_token_secret"])
 
                     last_tweeted = datetime.now()
 

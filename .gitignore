@@ -1,2 +1,4 @@
 # Ignore SQLite DB
 *.sqlite3
+/sniffer/auth.json
+*.pyc
