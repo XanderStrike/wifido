@@ -1,3 +1,8 @@
+Sources:
+http://www.movable-type.co.uk/scripts/latlong.html
+http://en.wikipedia.org/wiki/Solution_of_triangles
+http://stackoverflow.com/questions/11217674/how-to-calculate-distance-from-wifi-router-using-signal-strength
+
 # takes a signal strength (in dB) and frequency (in MHz) and returns the approximate
 # distance to the source of the signal
 def sigStrength2distance(strength, freq):
@@ -11,7 +16,7 @@ def distance_between_points(lat1, lon1, lat2, lon2):
     dPhi = math.log10(math.tan(math.pi/4+lat2/2)/math.tan(math.pi/4+lat1/2))
     q = Math.cos(lat1) if (math.isnan(dLat/dPhi)) else dLat/dPhi  # E-W line gives dPhi=0
 
-    # if dLon over 180° take shorter rhumb across anti-meridian:
+    # if dLon over 180ï¿½ take shorter rhumb across anti-meridian:
     if (math.fabs(dLon) > Math.pi):
         dLon = dLon>0 ? -(2*Math.pi-dLon) : (2*Math.pi+dLon)
 
