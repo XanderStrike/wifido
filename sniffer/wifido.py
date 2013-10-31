@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
             # TODO write to db
 
-        print "Current signal strength: " + str(strength)
+        print "Current signal strength: " + str(strongest_signal)
 
         # Blink LED
         GPIO.output(11, False)
