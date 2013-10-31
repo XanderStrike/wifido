@@ -40,8 +40,8 @@ if __name__ == "__main__":
             essid = cell["ESSID"]
 
             # Keep track of the strength of our primary network.
-            if essid == "Westmont_Encrypted" and strength > strongest_signal
-                strongest_signal = strengh
+            if essid == "Westmont_Encrypted" and strength > strongest_signal:
+                strongest_signal = strength
 
             Tweet.bark(essid, json_data)
 
@@ -54,8 +54,8 @@ if __name__ == "__main__":
         GPIO.output(11, True)
 
         # Sleep while playing sound
-        proc = subprocess.Popen(['mpg321', 'beep.mp3'], shell=False)
-        time.sleep( wait_time - (current_signal * multiplier) )
+        proc = subprocess.Popen(['mpg321', '-q', 'beep.mp3'], shell=False)
+        time.sleep( wait_time - (strongest_signal * multiplier) )
 
         proc.terminate()
         proc.wait()
