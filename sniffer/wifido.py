@@ -40,8 +40,9 @@ if __name__ == "__main__":
             essid = cell["ESSID"]
 
             # Keep track of the strength of our primary network.
-            if essid == "Westmont_Encrypted"
+            if essid == "Westmont_Encrypted":
                 current_signal = strength
+                print "Westmont_Encrypted: " + str(strength)
 
             Tweet.bark(essid, json_data)
 
