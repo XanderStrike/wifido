@@ -11,7 +11,6 @@ log = logging.getLogger("wifido")
 log.setLevel(logging.DEBUG)
 
 interface = "wlan1"  # Use a second wireless device
-current_signal = -0.1
 multiplier = 4
 wait_time = 5
 
@@ -31,6 +30,7 @@ if __name__ == "__main__":
         # gpsdata = {time: 12341234, alt: 432, lat: 431423.23, lon: -3232.22}
 
         # Process WiFi data
+        strongest_signal = 0
         for cell in IWList(interface).getData().values():
 
             match = re.match(r"(\d+)/(\d+)", cell["Signal"])
@@ -40,13 +40,13 @@ if __name__ == "__main__":
             essid = cell["ESSID"]
 
             # Keep track of the strength of our primary network.
-            if essid == "Westmont_Encrypted":
-                current_signal = strength
-                print "Westmont_Encrypted: " + str(strength)
+            if essid == "Westmont_Encrypted" and strength > strongest_signal
+                strongest_signal = strengh
 
             Tweet.bark(essid, json_data)
 
             # write to db
+        print "Current signal strength: " + str(strength)
 
         # Blink LED
         GPIO.output(11, False)
