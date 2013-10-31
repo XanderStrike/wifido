@@ -1,26 +1,21 @@
 from IWList import *
 from subprocess import Popen, PIPE, STDOUT
-from datetime import date, datetime, timedelta
-import sys, os, logging, time, subprocess, thread
+import sys, os, logging, time, subprocess, thread, re
 import RPi.GPIO as GPIO
 import Tweet
 import json
 from pprint import pprint
 
 logging.basicConfig()
-log = logging.getLogger("PyWiList")
+log = logging.getLogger("wifido")
 log.setLevel(logging.DEBUG)
 
-interface = "eth1"
-current_signal = -0.1
-multiplier = 4
-wait_time = 5
-tweet_frequency = 87 # seconds
+interface = "wlan1"  # Use a second wireless device
 
-whitelist = ["Westmont_Encrypted", "Westmont_Open", ""]
-#rogue_networks = {}
-last_tweeted = datetime.now()
-last_rogue_essid = ""
+ # How long to wait for a given signal strength (between 0 and 1)
+def wait_time (signal):
+    return 5 - 4*signal
+
 
 if __name__ == "__main__":
 
@@ -32,55 +27,37 @@ if __name__ == "__main__":
     GPIO.setup(11, GPIO.OUT)
 
     while True:
+        # TODO Get GPS data
+        # store in a temp var
+        # gpsdata = {time: 12341234, alt: 432, lat: 431423.23, lon: -3232.22}
 
-        iwl = IWList(interface)
-        data = iwl.getData()
+        # Process WiFi data
+        strongest_signal = 0
+        for cell in IWList(interface).getData().values():
 
-        for i in range(0, len(data.keys())):
+            match = re.match(r"(\d+)/(\d+)", cell["Signal"])
+            strength_nu = match.group(1)
+            strength_de = match.group(2)
+            strength = float(strength_nu) / float(strength_de)
+            essid = cell["ESSID"]
 
-            strength_1 = float(data[data.keys()[i]]["Signal"][0:data[data.keys()[i]]["Signal"].index("/")])
-            strength_2 = float(data[data.keys()[i]]["Signal"][3:6])
-            current_essid = data[data.keys()[i]]["ESSID"]
+            # Keep track of the strength of our primary network.
+            if essid == "Westmont_Encrypted" and strength > strongest_signal:
+                strongest_signal = strength
 
-            print str(strength_1) + " / " + str(strength_2) + " = " + str(strength_1 / strength_2) + " for " + current_essid
-            if ((strength_1 / strength_2) > current_signal) and current_essid == "Westmont_Encrypted":
-                current_signal = strength_1 / strength_2
+            Tweet.bark(essid, json_data)
 
-            # tweet here
-            tweet = "Bark! at " + current_essid + " on  " + datetime.now().strftime("%Y-%m-%d %H:%M and %S seconds")
+            # TODO write to db
 
-            if (current_essid not in whitelist):
+        print "Current signal strength: " + str(strongest_signal)
 
-                # if current_essid not in rogue_networks.keys():
-                #     rogue_networks[current_essid] = datetime.now()
-
-                # rogue_ready = (datetime.now() - rogue_networks[current_essid]).total_seconds() >= tweet_frequency
-
-                global_ready = (datetime.now() - last_tweeted).total_seconds() >= tweet_frequency
-
-                # print "GLOBAL: " + str(global_ready) + " ROGUE: " + str(rogue_ready)
-
-                if (global_ready and last_rogue_essid != current_essid):
-                    #Tweet.update_status(tweet, json_data["app_key"], json_data["app_secret"], json_data["oauth_token"], json_data["oauth_token_secret"])
-
-                    last_tweeted = datetime.now()
-
-                    #rogue_networks[current_essid] = datetime.now()
-
-                    last_rogue_essid = current_essid
-
-
-        # GPIO here
-
+        # Blink LED
         GPIO.output(11, False)
         time.sleep(.1)
         GPIO.output(11, True)
 
-        # print "Best Signal: " + str(current_signal)
-        # print "UP"
-        proc = subprocess.Popen(['mpg321', 'beep.mp3'], shell=False)
-        time.sleep( wait_time - (current_signal * multiplier) )
-
+        # Sleep while playing sound
+        proc = subprocess.Popen(['mpg321', '-q', 'beep.mp3'], shell=False)
+        time.sleep(wait_time(strongest_signal))
         proc.terminate()
-        # print "DOWN"
         proc.wait()
