@@ -7,8 +7,8 @@ last_tweeted = datetime.now()
 last_rogue_essid = ""
 
 def bark(essid, json_data):
-    if (essid not in whitelist):
-        global_ready = (datatime.now() - last_tweeted).total_seconds() >= tweet_frequency
+    if ("app_key" in json_data and essid not in whitelist):
+        global_ready = (datetime.now() - last_tweeted).total_seconds() >= tweet_frequency
         if (global_ready and last_rogue_essid != essid):
             last_tweeted = datetime.now()
             last_rogue_essid = essid
