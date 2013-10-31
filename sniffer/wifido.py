@@ -33,7 +33,7 @@ if __name__ == "__main__":
         # Get WiFi data
         iwl = IWList(interface)
         data = iwl.getData()
-        
+
         for cell in data.values():
 
             match = re.match(r"(\d+)/(\d+)", cell["Signal"])
@@ -41,7 +41,6 @@ if __name__ == "__main__":
             strength_2 = float(match.group(2))
             current_essid = cell["ESSID"]
 
-            print str(strength_1) + " / " + str(strength_2) + " = " + str(strength_1 / strength_2) + " for " + current_essid
             if ((strength_1 / strength_2) > current_signal) and current_essid == "Westmont_Encrypted":
                 current_signal = strength_1 / strength_2
 
