@@ -27,7 +27,7 @@ if __name__ == "__main__":
     GPIO.setup(11, GPIO.OUT)
 
     while True:
-        # Get GPS data
+        # TODO Get GPS data
         # store in a temp var
         # gpsdata = {time: 12341234, alt: 432, lat: 431423.23, lon: -3232.22}
 
@@ -47,7 +47,7 @@ if __name__ == "__main__":
 
             Tweet.bark(essid, json_data)
 
-            # write to db
+            # TODO write to db
 
         print "Current signal strength: " + str(strength)
 
