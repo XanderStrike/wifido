@@ -11,8 +11,10 @@ log = logging.getLogger("wifido")
 log.setLevel(logging.DEBUG)
 
 interface = "wlan1"  # Use a second wireless device
-multiplier = 4
-wait_time = 5
+
+ # How long to wait for a given signal strength (between 0 and 1)
+def wait_time (signal):
+    return 5 - 4*signal
 
 
 if __name__ == "__main__":
@@ -46,6 +48,7 @@ if __name__ == "__main__":
             Tweet.bark(essid, json_data)
 
             # write to db
+
         print "Current signal strength: " + str(strength)
 
         # Blink LED
@@ -55,7 +58,6 @@ if __name__ == "__main__":
 
         # Sleep while playing sound
         proc = subprocess.Popen(['mpg321', '-q', 'beep.mp3'], shell=False)
-        time.sleep( wait_time - (strongest_signal * multiplier) )
-
+        time.sleep(wait_time(strongest_signal))
         proc.terminate()
         proc.wait()
