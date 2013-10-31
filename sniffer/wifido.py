@@ -10,7 +10,7 @@ logging.basicConfig()
 log = logging.getLogger("wifido")
 log.setLevel(logging.DEBUG)
 
-interface = "wlan0"
+interface = "wlan1"  # Use a second wireless device
 current_signal = -0.1
 multiplier = 4
 wait_time = 5
