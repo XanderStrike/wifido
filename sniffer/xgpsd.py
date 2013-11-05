@@ -40,8 +40,6 @@ def start_listening():
 
 def get_data():
     # hash of common gps data
-    print "hey hey hey"
-    print gpsd.fix.latitude
     return {
         'lat': gpsd.fix.latitude,
         'lon': gpsd.fix.longitude,
