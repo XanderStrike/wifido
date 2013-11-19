@@ -1,4 +1,5 @@
 from IWList import *
+import xgpsd
 from subprocess import Popen, PIPE, STDOUT
 import sys, os, logging, time, subprocess, thread, re
 import RPi.GPIO as GPIO
@@ -26,10 +27,13 @@ if __name__ == "__main__":
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(11, GPIO.OUT)
 
+    xgpsd.start_listening()
+
     while True:
         # TODO Get GPS data
         # store in a temp var
         # gpsdata = {time: 12341234, alt: 432, lat: 431423.23, lon: -3232.22}
+        gpsdata = xgpsd.get_data()
 
         # Process WiFi data
         strongest_signal = 0
@@ -50,6 +54,7 @@ if __name__ == "__main__":
             # TODO write to db
 
         print "Current signal strength: " + str(strongest_signal)
+        print "Location: " + str(gpsdata["lat"]) + " " + str(gpsdata["lon"]) + " " + str(gpsdata["alt"])
 
         # Blink LED
         GPIO.output(11, False)
