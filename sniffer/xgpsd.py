@@ -18,6 +18,7 @@ class Listener(threading.Thread):
     gpsd = gps(mode=WATCH_ENABLE)
     self.current_value = None
     self.running = True
+    self.setDaemon(True)
 
   def run(self):
     # keep getting the newest data
@@ -28,14 +29,8 @@ class Listener(threading.Thread):
 def start_listening():
     # start listening
     gpsd = Listener()
-    try:
-        gpsd.start()
-        print "Now Listening..."
-    except (KeyboardInterrupt, SystemExit): #when you press ctrl+c
-        print "\nKilling Thread..."
-        gpsd.running = False
-        gpsd.join()
-    print "Done.\nExiting."
+    gpsd.start()
+    print "Now Listening..."
 
 
 def get_data():
