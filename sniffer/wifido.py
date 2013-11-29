@@ -42,10 +42,11 @@ if __name__ == "__main__":
     while True:
         # Get GPS data
         gpsdata = xgpsd.get_data()
-        
+       
+	# this is a rough estimate of distance, Manhattan: not Cartesian 
         distance_moved = (abs(gpsdata["lat"] - last_coords[0]) + abs(gpsdata["lon"] - last_coords[1]))
 
-        if distance_moved < .0001: 
+        if distance_moved > .0001: 
             # Process WiFi data
             strongest_signal = 0
             for cell in IWList(interface).getData().values():
@@ -79,14 +80,14 @@ if __name__ == "__main__":
                 cur = con.cursor()
                 cur.execute("INSERT INTO wifis values('" + "','".join(values) + "')")
             con.commit()
-        else if datetime.now().hour == 12 and last_upload_day = datetime.now().day:
+        else if datetime.now().hour == 22 and last_upload_day not == datetime.now().day: # if stationary, upload at 10 pm each day
             last_upload_day = datetime.now().day
             os.system("ifup wlan0")
             loop_count = 0
             while loop_count < 10 and not re.search("inet addr:\d+\.\d+\.\d+\.\d+", os.popen("ifconfig wlan0")):
                 time.sleep(5)
                 loop_count += 1
-            os.system("scp db/db.sqlite3 librarycounter:wifido/server/db/data.sqlite3")
+            os.system("scp db/db.sqlite3 librarycounter.westmont.edu:wifido/server/db/data.sqlite3")
             Tweet.commit()
             os.system("ifdown wlan0")
 
