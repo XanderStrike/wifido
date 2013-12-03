@@ -71,7 +71,7 @@ if __name__ == "__main__":
 
                 # Write to db
                 values = [
-                          str(time.time((),
+                          str(time.time()),
                           str(mac),
                           str(essid),
                           str(strength),
