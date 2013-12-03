@@ -6,6 +6,7 @@ import RPi.GPIO as GPIO
 import Tweet
 import json
 import sqlite3 as lite
+from time import time
 from datetime import datetime
 from pprint import pprint
 
@@ -69,7 +70,7 @@ if __name__ == "__main__":
 
                 # Write to db
                 values = [
-                          str(gpsdata["time"]),
+                          str(time.time((),
                           str(mac),
                           str(essid),
                           str(strength),
