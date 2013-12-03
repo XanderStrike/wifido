@@ -21,8 +21,9 @@ last_update_day = -1
 def wait_time (signal):
     return 5 - 4*signal
 
-
 if __name__ == "__main__":
+  try:
+    print '[' + str(datetime.now()) + ']'
 
     os.system("ifdown wlan0")
 
@@ -46,9 +47,9 @@ if __name__ == "__main__":
 	# this is a rough estimate of distance, Manhattan: not Cartesian 
         distance_moved = (abs(gpsdata["lat"] - last_coords[0]) + abs(gpsdata["lon"] - last_coords[1]))
 
+        strongest_signal = 0
         if distance_moved > .0001: 
             # Process WiFi data
-            strongest_signal = 0
             for cell in IWList(interface).getData().values():
                 match = re.match(r"(\d+)/(\d+)", cell["Signal"])
                 strength_nu = match.group(1)
@@ -80,7 +81,10 @@ if __name__ == "__main__":
                 cur = con.cursor()
                 cur.execute("INSERT INTO wifis values('" + "','".join(values) + "')")
             con.commit()
-        else if datetime.now().hour == 22 and last_upload_day not == datetime.now().day: # if stationary, upload at 10 pm each day
+
+            print "Current signal strength: " + str(strongest_signal)
+            print "Location: " + str(gpsdata["lat"]) + " " + str(gpsdata["lon"]) + " " + str(gpsdata["alt"])
+        elif datetime.now().hour == 22 and last_upload_day != datetime.now().day: # if stationary, upload at 10 pm each day
             last_upload_day = datetime.now().day
             os.system("ifup wlan0")
             loop_count = 0
@@ -90,9 +94,6 @@ if __name__ == "__main__":
             os.system("scp db/db.sqlite3 librarycounter.westmont.edu:wifido/server/db/data.sqlite3")
             Tweet.commit()
             os.system("ifdown wlan0")
-
-        print "Current signal strength: " + str(strongest_signal)
-        print "Location: " + str(gpsdata["lat"]) + " " + str(gpsdata["lon"]) + " " + str(gpsdata["alt"])
 
         # Blink LED
         GPIO.output(11, False)
@@ -107,3 +108,7 @@ if __name__ == "__main__":
         time.sleep(wait_time(strongest_signal))
         proc.terminate()
         proc.wait()
+  except:
+    raise
+  finally:
+    os.system('ifup wlan0')
