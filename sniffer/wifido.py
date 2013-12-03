@@ -25,6 +25,7 @@ def wait_time (signal):
 if __name__ == "__main__":
 
     os.system("ifdown wlan0")
+    os.system("amixer cset numid=3 1")
 
     con = lite.connect('db/db.sqlite3')
 
@@ -101,7 +102,7 @@ if __name__ == "__main__":
 
         # Get last gps coords
         last_coords = [gpsdata["lat"], gpsdata["lon"]]
-        
+
         # Sleep while playing sound
         proc = subprocess.Popen(['mpg321', '-q', 'beep.mp3'], shell=False)
         time.sleep(wait_time(strongest_signal))
