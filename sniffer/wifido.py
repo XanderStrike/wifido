@@ -6,7 +6,6 @@ import RPi.GPIO as GPIO
 import Tweet
 import json
 import sqlite3 as lite
-from time import time
 from datetime import datetime
 from pprint import pprint
 
