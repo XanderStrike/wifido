@@ -15,16 +15,18 @@ log.setLevel(logging.DEBUG)
 
 interface = "wlan0"  # Use a second wireless device
 
-last_update_day = -1
+last_upload_day = -1
 
  # How long to wait for a given signal strength (between 0 and 1)
 def wait_time (signal):
     return 5 - 4*signal
 
-
 if __name__ == "__main__":
+  try:
+    print '[' + str(datetime.now()) + ']'
 
     os.system("ifdown wlan0")
+    #os.system("amixer cset numid=3 1")
 
     con = lite.connect('db/db.sqlite3')
 
@@ -46,9 +48,9 @@ if __name__ == "__main__":
 	# this is a rough estimate of distance, Manhattan: not Cartesian 
         distance_moved = (abs(gpsdata["lat"] - last_coords[0]) + abs(gpsdata["lon"] - last_coords[1]))
 
+        strongest_signal = 0
         if distance_moved > .0001: 
             # Process WiFi data
-            strongest_signal = 0
             for cell in IWList(interface).getData().values():
                 match = re.match(r"(\d+)/(\d+)", cell["Signal"])
                 strength_nu = match.group(1)
@@ -68,7 +70,7 @@ if __name__ == "__main__":
 
                 # Write to db
                 values = [
-                          str(gpsdata["time"]),
+                          str(time.time()),
                           str(mac),
                           str(essid),
                           str(strength),
@@ -80,7 +82,10 @@ if __name__ == "__main__":
                 cur = con.cursor()
                 cur.execute("INSERT INTO wifis values('" + "','".join(values) + "')")
             con.commit()
-        else if datetime.now().hour == 22 and last_upload_day not == datetime.now().day: # if stationary, upload at 10 pm each day
+
+            print "Current signal strength: " + str(strongest_signal)
+            print "Location: " + str(gpsdata["lat"]) + " " + str(gpsdata["lon"]) + " " + str(gpsdata["alt"])
+        elif datetime.now().hour == 22 and last_upload_day != datetime.now().day: # if stationary, upload at 10 pm each day
             last_upload_day = datetime.now().day
             os.system("ifup wlan0")
             loop_count = 0
@@ -91,9 +96,6 @@ if __name__ == "__main__":
             Tweet.commit()
             os.system("ifdown wlan0")
 
-        print "Current signal strength: " + str(strongest_signal)
-        print "Location: " + str(gpsdata["lat"]) + " " + str(gpsdata["lon"]) + " " + str(gpsdata["alt"])
-
         # Blink LED
         GPIO.output(11, False)
         time.sleep(.1)
@@ -101,9 +103,14 @@ if __name__ == "__main__":
 
         # Get last gps coords
         last_coords = [gpsdata["lat"], gpsdata["lon"]]
-        
+
         # Sleep while playing sound
-        proc = subprocess.Popen(['mpg321', '-q', 'beep.mp3'], shell=False)
+        # TODO: figure out if/why this is breaking?
+        #proc = subprocess.Popen(['mpg321', '-q', 'beep.mp3'], shell=False)
         time.sleep(wait_time(strongest_signal))
-        proc.terminate()
-        proc.wait()
+        #proc.terminate()
+        #proc.wait()
+  except:
+    raise
+  finally:
+    os.system('ifup wlan0')
