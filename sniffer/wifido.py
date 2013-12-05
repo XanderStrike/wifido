@@ -15,7 +15,7 @@ log.setLevel(logging.DEBUG)
 
 interface = "wlan0"  # Use a second wireless device
 
-last_update_day = -1
+last_upload_day = -1
 
  # How long to wait for a given signal strength (between 0 and 1)
 def wait_time (signal):
