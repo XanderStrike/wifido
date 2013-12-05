@@ -2,7 +2,7 @@ from IWList import *
 import xgpsd
 from subprocess import Popen, PIPE, STDOUT
 import sys, os, logging, time, subprocess, thread, re
-import RPi.GPIO as GPIO
+#import RPi.GPIO as GPIO
 import Tweet
 import json
 import sqlite3 as lite
@@ -13,7 +13,7 @@ logging.basicConfig()
 log = logging.getLogger("wifido")
 log.setLevel(logging.DEBUG)
 
-interface = "wlan0"  # Use a second wireless device
+interface = "eth1"  # Use a second wireless device
 
 last_upload_day = -1
 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
   try:
     print '[' + str(datetime.now()) + ']'
 
-    os.system("ifdown wlan0")
+    os.system("ifdown " + interface)
     #os.system("amixer cset numid=3 1")
 
     con = lite.connect('db/db.sqlite3')
@@ -34,8 +34,8 @@ if __name__ == "__main__":
     json_data = json.load(json_file)
     json_file.close()
 
-    GPIO.setmode(GPIO.BOARD)
-    GPIO.setup(11, GPIO.OUT)
+    #GPIO.setmode(GPIO.BOARD)
+    #GPIO.setup(11, GPIO.OUT)
 
     xgpsd.start_listening()
 
@@ -87,19 +87,19 @@ if __name__ == "__main__":
             print "Location: " + str(gpsdata["lat"]) + " " + str(gpsdata["lon"]) + " " + str(gpsdata["alt"])
         elif datetime.now().hour == 22 and last_upload_day != datetime.now().day: # if stationary, upload at 10 pm each day
             last_upload_day = datetime.now().day
-            os.system("ifup wlan0")
+            os.system("ifup " + interface)
             loop_count = 0
-            while loop_count < 10 and not re.search("inet addr:\d+\.\d+\.\d+\.\d+", os.popen("ifconfig wlan0")):
+            while loop_count < 10 and not re.search("inet addr:\d+\.\d+\.\d+\.\d+", os.popen("ifconfig " + interface)):
                 time.sleep(5)
                 loop_count += 1
             os.system("scp db/db.sqlite3 librarycounter.westmont.edu:wifido/server/db/data.sqlite3")
             Tweet.commit()
-            os.system("ifdown wlan0")
+            os.system("ifdown " + interface)
 
         # Blink LED
-        GPIO.output(11, False)
-        time.sleep(.1)
-        GPIO.output(11, True)
+        #GPIO.output(11, False)
+        #time.sleep(.1)
+        #GPIO.output(11, True)
 
         # Get last gps coords
         last_coords = [gpsdata["lat"], gpsdata["lon"]]
@@ -113,4 +113,4 @@ if __name__ == "__main__":
   except:
     raise
   finally:
-    os.system('ifup wlan0')
+    os.system('ifup ' + interface)
