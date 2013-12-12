@@ -44,12 +44,15 @@ if __name__ == "__main__":
     while True:
         # Get GPS data
         gpsdata = xgpsd.get_data()
-       
-	# this is a rough estimate of distance, Manhattan: not Cartesian 
+
+    # this is a rough estimate of distance, Manhattan: not Cartesian 
         distance_moved = (abs(gpsdata["lat"] - last_coords[0]) + abs(gpsdata["lon"] - last_coords[1]))
 
         strongest_signal = 0
-        if distance_moved > .0001: 
+        if distance_moved > .00005:
+            # Set last gps coords
+            last_coords = [gpsdata["lat"], gpsdata["lon"]]
+
             # Process WiFi data
             for cell in IWList(interface).getData().values():
                 match = re.match(r"(\d+)/(\d+)", cell["Signal"])
@@ -100,9 +103,6 @@ if __name__ == "__main__":
         #GPIO.output(11, False)
         #time.sleep(.1)
         #GPIO.output(11, True)
-
-        # Get last gps coords
-        last_coords = [gpsdata["lat"], gpsdata["lon"]]
 
         # Sleep while playing sound
         # TODO: figure out if/why this is breaking?
