@@ -3,3 +3,4 @@
 /sniffer/auth.json
 *.pyc
 *.log
+log.*
